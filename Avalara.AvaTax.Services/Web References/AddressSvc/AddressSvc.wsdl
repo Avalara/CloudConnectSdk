@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://avatax.avalara.com/services" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="AddressSvc" targetNamespace="http://avatax.avalara.com/services" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="CustomBinding_AddressSvc_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" mustUnderstand="0" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Lax />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <sp:SignedSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:UsernameToken sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+              <wsp:Policy>
+                <sp:WssUsernameToken10 />
+              </wsp:Policy>
+            </sp:UsernameToken>
+          </wsp:Policy>
+        </sp:SignedSupportingTokens>
+        <sp:Wss11 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy />
+        </sp:Wss11>
+        <sp:Trust10 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:MustSupportIssuedTokens />
+            <sp:RequireClientEntropy />
+            <sp:RequireServerEntropy />
+          </wsp:Policy>
+        </sp:Trust10>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://avatax.avalara.com/services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="Ping">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="Message" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PingResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="PingResult" type="tns:PingResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="PingResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="Version" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="BaseResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="TransactionId" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ResultCode" type="tns:SeverityLevel" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Messages" type="tns:ArrayOfMessage" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="SeverityLevel">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Success" />
+          <xs:enumeration value="Warning" />
+          <xs:enumeration value="Error" />
+          <xs:enumeration value="Exception" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="ArrayOfMessage">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Message" nillable="true" type="tns:Message" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Message">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Summary" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Details" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="HelpLink" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RefersTo" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Severity" type="tns:SeverityLevel" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Source" type="xs:string" />
+        </xs:sequence>
+        <xs:attribute name="Name" type="xs:string" />
+      </xs:complexType>
+      <xs:element name="IsAuthorized">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="Operations" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="IsAuthorizedResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="IsAuthorizedResult" type="tns:IsAuthorizedResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="IsAuthorizedResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="Operations" type="xs:string" />
+              <xs:element minOccurs="1" maxOccurs="1" name="Expires" type="xs:dateTime" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="Validate">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="ValidateRequest" type="tns:ValidateRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="ValidateRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Address" type="tns:BaseAddress" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TextCase" type="tns:TextCase" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Coordinates" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Taxability" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Date" type="xs:date" />
+          <xs:element minOccurs="1" maxOccurs="1" name="UseDPV" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="IsFromTaxSvc" type="xs:boolean" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="BaseAddress">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="AddressCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Line1" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Line2" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Line3" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="City" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Region" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PostalCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Country" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxRegionId" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Latitude" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Longitude" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ValidAddress">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseAddress">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="Line4" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="County" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="FipsCode" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="CarrierRoute" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="PostNet" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="AddressType" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="ValidateStatus" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="GeocodeType" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:simpleType name="TextCase">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Default" />
+          <xs:enumeration value="Upper" />
+          <xs:enumeration value="Mixed" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="ValidateResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="ValidateResult" type="tns:ValidateResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="ValidateResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="ValidAddresses" type="tns:ArrayOfValidAddress" />
+              <xs:element minOccurs="1" maxOccurs="1" name="Taxable" type="xs:boolean" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="ArrayOfValidAddress">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ValidAddress" nillable="true" type="tns:ValidAddress" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="AddressSvc_Ping_InputMessage">
+    <wsdl:part name="parameters" element="tns:Ping" />
+  </wsdl:message>
+  <wsdl:message name="AddressSvc_Ping_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PingResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddressSvc_IsAuthorized_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsAuthorized" />
+  </wsdl:message>
+  <wsdl:message name="AddressSvc_IsAuthorized_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsAuthorizedResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddressSvc_Validate_InputMessage">
+    <wsdl:part name="parameters" element="tns:Validate" />
+  </wsdl:message>
+  <wsdl:message name="AddressSvc_Validate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateResponse" />
+  </wsdl:message>
+  <wsdl:portType name="AddressSvc">
+    <wsdl:operation name="Ping">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/Ping" message="tns:AddressSvc_Ping_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/AddressSvc/PingResponse" message="tns:AddressSvc_Ping_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsAuthorized">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/IsAuthorized" message="tns:AddressSvc_IsAuthorized_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/AddressSvc/IsAuthorizedResponse" message="tns:AddressSvc_IsAuthorized_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Validate">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/Validate" message="tns:AddressSvc_Validate_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/AddressSvc/ValidateResponse" message="tns:AddressSvc_Validate_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CustomBinding_AddressSvc" type="tns:AddressSvc">
+    <wsp:PolicyReference URI="#CustomBinding_AddressSvc_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Ping">
+      <soap:operation soapAction="http://avatax.avalara.com/services/Ping" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsAuthorized">
+      <soap:operation soapAction="http://avatax.avalara.com/services/IsAuthorized" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Validate">
+      <soap:operation soapAction="http://avatax.avalara.com/services/Validate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_AddressSvc" type="tns:AddressSvc">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Ping">
+      <soap:operation soapAction="http://avatax.avalara.com/services/Ping" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsAuthorized">
+      <soap:operation soapAction="http://avatax.avalara.com/services/IsAuthorized" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Validate">
+      <soap:operation soapAction="http://avatax.avalara.com/services/Validate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AddressSvc">
+    <wsdl:port name="CustomBinding_AddressSvc" binding="tns:CustomBinding_AddressSvc">
+      <soap:address location="http://avatax.avalara.net/Address/AddressSvc.svc" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_AddressSvc" binding="tns:BasicHttpBinding_AddressSvc">
+      <soap:address location="http://avatax.avalara.net/Address/AddressSvc.svc/AltSec" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

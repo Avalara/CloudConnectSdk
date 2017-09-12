@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalara.CloudConnect.Sdk", "Avalara.CloudConnect.Sdk\Avalara.CloudConnect.Sdk.csproj", "{6E5EC09F-5012-44E8-89EE-292CDD70B133}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalara.AvaTax.Services", "Avalara.AvaTax.Services\Avalara.AvaTax.Services.csproj", "{27051081-1436-442B-AD33-9C0D6A6C630D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalara.CloudConnect.Sdk.Tests", "Avalara.CloudConnect.Sdk.Tests\Avalara.CloudConnect.Sdk.Tests.csproj", "{FC7DF640-5CFE-473F-BC48-051C8224424E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E5EC09F-5012-44E8-89EE-292CDD70B133}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E5EC09F-5012-44E8-89EE-292CDD70B133}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E5EC09F-5012-44E8-89EE-292CDD70B133}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E5EC09F-5012-44E8-89EE-292CDD70B133}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27051081-1436-442B-AD33-9C0D6A6C630D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27051081-1436-442B-AD33-9C0D6A6C630D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27051081-1436-442B-AD33-9C0D6A6C630D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27051081-1436-442B-AD33-9C0D6A6C630D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC7DF640-5CFE-473F-BC48-051C8224424E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC7DF640-5CFE-473F-BC48-051C8224424E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC7DF640-5CFE-473F-BC48-051C8224424E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC7DF640-5CFE-473F-BC48-051C8224424E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {59A2FC34-1A02-4FC4-AC87-312EF5F96FE9}
+	EndGlobalSection
+EndGlobal

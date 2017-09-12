@@ -1,0 +1,18 @@
+## Visual Studio ##
+*.suo
+*.pdb
+*.user
+bin/
+Debug/
+Release/
+obj/
+TestResults/
+packages/
+.vs/
+
+## Windows, OS X ##
+Thumbs.db
+.DS_Store
+._.DS_Store
+Desktop.ini
+*.msi

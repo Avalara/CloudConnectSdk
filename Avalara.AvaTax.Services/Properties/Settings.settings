@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Avalara.AvaTax.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Avalara_AvaTax_Services_TaxSvc_TaxSvc" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://avatax.avalara.net/tax/TaxSvc.svc</Value>
+    </Setting>
+    <Setting Name="Avalara_AvaTax_Services_AddressSvc_AddressSvc" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://avatax.avalara.net/Address/AddressSvc.svc</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

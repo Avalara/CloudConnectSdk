@@ -1,0 +1,1319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://avatax.avalara.com/services" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TaxSvc" targetNamespace="http://avatax.avalara.com/services" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="CustomBinding_TaxSvc_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" mustUnderstand="0" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Lax />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <sp:SignedSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:UsernameToken sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+              <wsp:Policy>
+                <sp:WssUsernameToken10 />
+              </wsp:Policy>
+            </sp:UsernameToken>
+          </wsp:Policy>
+        </sp:SignedSupportingTokens>
+        <sp:Wss11 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy />
+        </sp:Wss11>
+        <sp:Trust10 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:MustSupportIssuedTokens />
+            <sp:RequireClientEntropy />
+            <sp:RequireServerEntropy />
+          </wsp:Policy>
+        </sp:Trust10>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://avatax.avalara.com/services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="AdjustTax">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="AdjustTaxRequest" type="tns:AdjustTaxRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="AdjustTaxRequest">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="AdjustmentReason" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AdjustmentDescription" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="GetTaxRequest" type="tns:GetTaxRequest" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetTaxRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="CompanyCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DocType" type="tns:DocumentType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DocCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DocDate" type="xs:date" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SalespersonCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomerCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomerUsageType" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Discount" type="xs:decimal" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PurchaseOrderNo" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ExemptionNo" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="OriginCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DestinationCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Addresses" type="tns:ArrayOfBaseAddress" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AddressLocationTypes" type="tns:ArrayOfAddressLocationType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Lines" type="tns:ArrayOfLine" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DetailLevel" type="tns:DetailLevel" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ReferenceCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="HashCode" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="LocationCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Commit" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="BatchCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TaxOverride" type="tns:TaxOverride" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CurrencyCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ServiceMode" type="tns:ServiceMode" />
+          <xs:element minOccurs="1" maxOccurs="1" name="PaymentDate" type="xs:date" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ExchangeRate" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ExchangeRateEffDate" type="xs:date" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PosLaneCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="BusinessIdentificationNo" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="IsSellerImporterOfRecord" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="BRBuyerType" type="tns:BRBuyerTypeEnum" />
+          <xs:element minOccurs="1" maxOccurs="1" name="BRBuyer_IsExemptOrCannotWH_IRRF" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="BRBuyer_IsExemptOrCannotWH_PISRF" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="BRBuyer_IsExemptOrCannotWH_COFINSRF" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="BRBuyer_IsExemptOrCannotWH_CSLLRF" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="BRBuyer_IsExempt_PIS" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="BRBuyer_IsExempt_COFINS" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="BRBuyer_IsExempt_CSLL" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Email" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ParameterBagItems" type="tns:ArrayOfParameterBagItem" />
+          <xs:element minOccurs="0" maxOccurs="1" name="VATNumberType" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="DocumentType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="SalesOrder" />
+          <xs:enumeration value="SalesInvoice" />
+          <xs:enumeration value="PurchaseOrder" />
+          <xs:enumeration value="PurchaseInvoice" />
+          <xs:enumeration value="ReturnOrder" />
+          <xs:enumeration value="ReturnInvoice" />
+          <xs:enumeration value="InventoryTransferOrder" />
+          <xs:enumeration value="InventoryTransferInvoice" />
+          <xs:enumeration value="ReverseChargeOrder" />
+          <xs:enumeration value="ReverseChargeInvoice" />
+          <xs:enumeration value="Any" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="ArrayOfBaseAddress">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="BaseAddress" nillable="true" type="tns:BaseAddress" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="BaseAddress">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="AddressCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Line1" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Line2" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Line3" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="City" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Region" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PostalCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Country" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxRegionId" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Latitude" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Longitude" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ArrayOfAddressLocationType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="AddressLocationType" nillable="true" type="tns:AddressLocationType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="AddressLocationType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="AddressCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="LocationTypeCode" type="tns:LocationTypeCodeEnum" />
+          <xs:element minOccurs="1" maxOccurs="1" name="IsAddressValidationRequired" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShouldBePersisted" type="xs:boolean" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="LocationTypeCodeEnum">
+        <xs:list>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="ShipFrom" />
+              <xs:enumeration value="ShipTo" />
+              <xs:enumeration value="PointOfOrderAcceptance" />
+              <xs:enumeration value="PointOfOrderOrigin" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:list>
+      </xs:simpleType>
+      <xs:complexType name="ArrayOfLine">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Line" nillable="true" type="tns:Line" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Line">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="No" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="OriginCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DestinationCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ItemCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TaxCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Qty" type="xs:decimal" />
+          <xs:element minOccurs="0" maxOccurs="1" name="UnitOfMeasurement" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Discounted" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RevAcct" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Ref1" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Ref2" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ExemptionNo" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomerUsageType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TaxOverride" type="tns:TaxOverride" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxIncluded" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="BusinessIdentificationNo" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="VATNumberType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AddressLocationTypes" type="tns:ArrayOfAddressLocationType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ParameterBagItems" type="tns:ArrayOfParameterBagItem" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TaxOverride">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxOverrideType" type="tns:TaxOverrideType" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxAmount" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxDate" type="xs:date" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Reason" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="TaxOverrideType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="None" />
+          <xs:enumeration value="TaxAmount" />
+          <xs:enumeration value="Exemption" />
+          <xs:enumeration value="TaxDate" />
+          <xs:enumeration value="AccruedTaxAmount" />
+          <xs:enumeration value="DeriveTaxable" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="ArrayOfParameterBagItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ParameterBagItem" nillable="true" type="tns:ParameterBagItem" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ParameterBagItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Value" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="UOMCode" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="DetailLevel">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Document" />
+          <xs:enumeration value="Summary" />
+          <xs:enumeration value="Line" />
+          <xs:enumeration value="Tax" />
+          <xs:enumeration value="Diagnostic" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="ServiceMode">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Automatic" />
+          <xs:enumeration value="Local" />
+          <xs:enumeration value="Remote" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="BRBuyerTypeEnum">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="IND" />
+          <xs:enumeration value="BUS" />
+          <xs:enumeration value="GOV" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="AdjustTaxResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="AdjustTaxResult" type="tns:AdjustTaxResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="AdjustTaxResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:GetTaxResult" />
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="GetTaxResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="DocId" type="xs:string" />
+              <xs:element minOccurs="1" maxOccurs="1" name="DocType" type="tns:DocumentType" />
+              <xs:element minOccurs="0" maxOccurs="1" name="DocCode" type="xs:string" />
+              <xs:element minOccurs="1" maxOccurs="1" name="DocDate" type="xs:date" />
+              <xs:element minOccurs="1" maxOccurs="1" name="DocStatus" type="tns:DocStatus" />
+              <xs:element minOccurs="1" maxOccurs="1" name="Reconciled" type="xs:boolean" />
+              <xs:element minOccurs="1" maxOccurs="1" name="Timestamp" type="xs:dateTime" />
+              <xs:element minOccurs="1" maxOccurs="1" name="TotalAmount" type="xs:decimal" />
+              <xs:element minOccurs="1" maxOccurs="1" name="TotalDiscount" type="xs:decimal" />
+              <xs:element minOccurs="1" maxOccurs="1" name="TotalExemption" type="xs:decimal" />
+              <xs:element minOccurs="1" maxOccurs="1" name="TotalTaxable" type="xs:decimal" />
+              <xs:element minOccurs="1" maxOccurs="1" name="TotalTax" type="xs:decimal" />
+              <xs:element minOccurs="1" maxOccurs="1" name="TotalTaxCalculated" type="xs:decimal" />
+              <xs:element minOccurs="1" maxOccurs="1" name="HashCode" type="xs:int" />
+              <xs:element minOccurs="0" maxOccurs="1" name="TaxLines" type="tns:ArrayOfTaxLine" />
+              <xs:element minOccurs="0" maxOccurs="1" name="TaxAddresses" type="tns:ArrayOfTaxAddress" />
+              <xs:element minOccurs="1" maxOccurs="1" name="Locked" type="xs:boolean" />
+              <xs:element minOccurs="1" maxOccurs="1" name="AdjustmentReason" type="xs:int" />
+              <xs:element minOccurs="0" maxOccurs="1" name="AdjustmentDescription" type="xs:string" />
+              <xs:element minOccurs="1" maxOccurs="1" name="Version" type="xs:int" />
+              <xs:element minOccurs="1" maxOccurs="1" name="TaxDate" type="xs:date" />
+              <xs:element minOccurs="0" maxOccurs="1" name="TaxSummary" type="tns:ArrayOfTaxDetail" />
+              <xs:element minOccurs="1" maxOccurs="1" name="VolatileTaxRates" type="xs:boolean" />
+              <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="VATNumberType" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="BaseResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="TransactionId" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ResultCode" type="tns:SeverityLevel" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Messages" type="tns:ArrayOfMessage" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="SeverityLevel">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Success" />
+          <xs:enumeration value="Warning" />
+          <xs:enumeration value="Error" />
+          <xs:enumeration value="Exception" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="ArrayOfMessage">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Message" nillable="true" type="tns:Message" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Message">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Summary" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Details" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="HelpLink" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RefersTo" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Severity" type="tns:SeverityLevel" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Source" type="xs:string" />
+        </xs:sequence>
+        <xs:attribute name="Name" type="xs:string" />
+      </xs:complexType>
+      <xs:simpleType name="DocStatus">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Temporary" />
+          <xs:enumeration value="Saved" />
+          <xs:enumeration value="Posted" />
+          <xs:enumeration value="Committed" />
+          <xs:enumeration value="Cancelled" />
+          <xs:enumeration value="Adjusted" />
+          <xs:enumeration value="Queued" />
+          <xs:enumeration value="PendingApproval" />
+          <xs:enumeration value="Any" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="ArrayOfTaxLine">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TaxLine" nillable="true" type="tns:TaxLine" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TaxLine">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="No" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TaxCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Taxability" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="BoundaryLevel" type="tns:BoundaryLevel" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Exemption" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Discount" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Taxable" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Rate" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Tax" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxCalculated" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxIncluded" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TaxDetails" type="tns:ArrayOfTaxDetail" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ExemptCertId" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxDate" type="xs:date" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ReportingDate" type="xs:date" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AccountingMethod" type="tns:AccountingMethod" />
+          <xs:element minOccurs="0" maxOccurs="1" name="VATCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="VATNumberType" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="BoundaryLevel">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Address" />
+          <xs:enumeration value="Zip9" />
+          <xs:enumeration value="Zip5" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="ArrayOfTaxDetail">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TaxDetail" nillable="true" type="tns:TaxDetail" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TaxDetail">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Country" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Region" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="JurisType" type="tns:JurisdictionType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="JurisCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TaxType" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Base" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Taxable" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Rate" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Tax" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxCalculated" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NonTaxable" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Exemption" type="xs:decimal" />
+          <xs:element minOccurs="0" maxOccurs="1" name="JurisName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TaxName" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxAuthorityType" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TaxGroup" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RateType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="StateAssignedNo" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxableUnits" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NonTaxableUnits" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ExemptUnits" type="xs:decimal" />
+          <xs:element minOccurs="0" maxOccurs="1" name="UnitOfBasis" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TaxTypeGroupId" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TaxSubTypeId" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="IsFee" type="xs:boolean" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="JurisdictionType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Country" />
+          <xs:enumeration value="Composite" />
+          <xs:enumeration value="State" />
+          <xs:enumeration value="County" />
+          <xs:enumeration value="City" />
+          <xs:enumeration value="Special" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="AccountingMethod">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Accrual" />
+          <xs:enumeration value="Cash" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="ArrayOfTaxAddress">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TaxAddress" nillable="true" type="tns:TaxAddress" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TaxAddress">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Address" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AddressCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="BoundaryLevel" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="City" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Country" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PostalCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Region" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxRegionId" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="JurisCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Latitude" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Longitude" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="GeocodeType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ValidateStatus" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DistanceToBoundary" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="CancelTax">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="CancelTaxRequest" type="tns:CancelTaxRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="CancelTaxRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="DocId" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CompanyCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DocType" type="tns:DocumentType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DocCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CancelCode" type="tns:CancelCode" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="CancelCode">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Unspecified" />
+          <xs:enumeration value="PostFailed" />
+          <xs:enumeration value="DocDeleted" />
+          <xs:enumeration value="DocVoided" />
+          <xs:enumeration value="AdjustmentCancelled" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="CancelTaxResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="CancelTaxResult" type="tns:CancelTaxResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="CancelTaxResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="DocId" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="CommitTax">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="CommitTaxRequest" type="tns:CommitTaxRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="CommitTaxRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="DocId" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CompanyCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DocType" type="tns:DocumentType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DocCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="NewDocCode" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="CommitTaxResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="CommitTaxResult" type="tns:CommitTaxResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="CommitTaxResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="DocId" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="Ping">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="Message" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PingResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="PingResult" type="tns:PingResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="PingResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="Version" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="IsAuthorized">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="Operations" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="IsAuthorizedResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="IsAuthorizedResult" type="tns:IsAuthorizedResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="IsAuthorizedResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="Operations" type="xs:string" />
+              <xs:element minOccurs="1" maxOccurs="1" name="Expires" type="xs:dateTime" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="GetTax">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="GetTaxRequest" type="tns:GetTaxRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetTaxResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="GetTaxResult" type="tns:GetTaxResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetTaxHistory">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="GetTaxHistoryRequest" type="tns:GetTaxHistoryRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="GetTaxHistoryRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="DocId" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CompanyCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DocType" type="tns:DocumentType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DocCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DetailLevel" type="tns:DetailLevel" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="GetTaxHistoryResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="GetTaxHistoryResult" type="tns:GetTaxHistoryResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="GetTaxHistoryResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="GetTaxRequest" type="tns:GetTaxRequest" />
+              <xs:element minOccurs="0" maxOccurs="1" name="GetTaxResult" type="tns:GetTaxResult" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="PostTax">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="PostTaxRequest" type="tns:PostTaxRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="PostTaxRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="DocId" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CompanyCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DocType" type="tns:DocumentType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DocCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DocDate" type="xs:date" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TotalAmount" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TotalTax" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="HashCode" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Commit" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="NewDocCode" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="PostTaxResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="PostTaxResult" type="tns:PostTaxResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="PostTaxResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="DocId" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="ReconcileTaxHistory">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="ReconcileTaxHistoryRequest" type="tns:ReconcileTaxHistoryRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="ReconcileTaxHistoryRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="CompanyCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="LastDocId" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Reconciled" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="StartDate" type="xs:date" />
+          <xs:element minOccurs="1" maxOccurs="1" name="EndDate" type="xs:date" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DocStatus" type="tns:DocStatus" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DocType" type="tns:DocumentType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="LastDocCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="PageSize" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ReconcileTaxHistoryResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="ReconcileTaxHistoryResult" type="tns:ReconcileTaxHistoryResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="ReconcileTaxHistoryResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:SearchTaxHistoryResult">
+            <xs:sequence>
+              <xs:element minOccurs="1" maxOccurs="1" name="RecordCount" type="xs:int" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="SearchTaxHistoryResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="GetTaxResults" type="tns:ArrayOfGetTaxResult" />
+              <xs:element minOccurs="0" maxOccurs="1" name="LastDocId" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="LastDocCode" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="ArrayOfGetTaxResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="GetTaxResult" nillable="true" type="tns:GetTaxResult" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ApplyPayment">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="ApplyPaymentRequest" type="tns:ApplyPaymentRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="ApplyPaymentRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="DocId" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CompanyCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DocType" type="tns:DocumentType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DocCode" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="PaymentDate" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ApplyPaymentResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="ApplyPaymentResult" type="tns:ApplyPaymentResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="ApplyPaymentResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="DocId" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TaxSummaryFetch">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="TaxSummaryFetchRequest" type="tns:TaxSummaryFetchRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="TaxSummaryFetchRequest">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="StartDate" type="xs:date" />
+          <xs:element minOccurs="1" maxOccurs="1" name="EndDate" type="xs:date" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MerchantCode" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="TaxSummaryFetchResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="TaxSummaryFetchResult" type="tns:TaxSummaryFetchResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="TaxSummaryFetchResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="TaxSummaryReport">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:any />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="GetParameterBagItems">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="GetParameterBagItemsRequest" type="tns:GetParameterBagItemsRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="GetParameterBagItemsRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Category" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Country" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="State" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="GetParameterBagItemsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="GetParameterBagItemsResult" type="tns:GetParameterBagItemsResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="GetParameterBagItemsResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="ParameterBags" type="tns:ArrayOfParameterBag" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="ArrayOfParameterBag">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ParameterBag" nillable="true" type="tns:ParameterBag" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ParameterBag">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="ParameterBagId" type="xs:long" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Category" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DataType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Country" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="State" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="GetAllParameterBagItems">
+        <xs:complexType />
+      </xs:element>
+      <xs:element name="GetAllParameterBagItemsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="GetAllParameterBagItemsResult" type="tns:GetAllParameterBagItemsResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="GetAllParameterBagItemsResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:BaseResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="ParameterBags" type="tns:ArrayOfParameterBag" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="DoNotUseInternalOnly">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="DoNotUseInternalOnlyRequest" type="tns:DoNotUseInternalOnlyRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="DoNotUseInternalOnlyRequest">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxType" type="tns:TaxType" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxTypeGroupIdEnum" type="tns:TaxTypeGroupIdEnum" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxSubTypeIdEnum" type="tns:TaxSubTypeIdEnum" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="TaxType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="ALL" />
+          <xs:enumeration value="Sales" />
+          <xs:enumeration value="Use" />
+          <xs:enumeration value="Excise" />
+          <xs:enumeration value="Lodging" />
+          <xs:enumeration value="Bottle" />
+          <xs:enumeration value="Input" />
+          <xs:enumeration value="Output" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TaxTypeGroupIdEnum">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="SalesAndUse" />
+          <xs:enumeration value="Excise" />
+          <xs:enumeration value="Lodging" />
+          <xs:enumeration value="Bottle" />
+          <xs:enumeration value="InputAndOutput" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TaxSubTypeIdEnum">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="ALL" />
+          <xs:enumeration value="S" />
+          <xs:enumeration value="U" />
+          <xs:enumeration value="MedicalExcise" />
+          <xs:enumeration value="TransientRoom" />
+          <xs:enumeration value="Accommodations" />
+          <xs:enumeration value="StateAccommodations" />
+          <xs:enumeration value="CountyAccommodations" />
+          <xs:enumeration value="Hotel" />
+          <xs:enumeration value="Tourism" />
+          <xs:enumeration value="Hospitality" />
+          <xs:enumeration value="Preservation" />
+          <xs:enumeration value="ConventionCenter" />
+          <xs:enumeration value="Lodging" />
+          <xs:enumeration value="Bottle" />
+          <xs:enumeration value="I" />
+          <xs:enumeration value="O" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="DoNotUseInternalOnlyResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="DoNotUseInternalOnlyResult" type="tns:DoNotUseInternalOnlyResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="DoNotUseInternalOnlyResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Status" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="TaxSvc_AdjustTax_InputMessage">
+    <wsdl:part name="parameters" element="tns:AdjustTax" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_AdjustTax_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AdjustTaxResponse" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_CancelTax_InputMessage">
+    <wsdl:part name="parameters" element="tns:CancelTax" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_CancelTax_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CancelTaxResponse" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_CommitTax_InputMessage">
+    <wsdl:part name="parameters" element="tns:CommitTax" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_CommitTax_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CommitTaxResponse" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_Ping_InputMessage">
+    <wsdl:part name="parameters" element="tns:Ping" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_Ping_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PingResponse" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_IsAuthorized_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsAuthorized" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_IsAuthorized_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsAuthorizedResponse" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_GetTax_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTax" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_GetTax_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTaxResponse" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_GetTaxHistory_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTaxHistory" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_GetTaxHistory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTaxHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_PostTax_InputMessage">
+    <wsdl:part name="parameters" element="tns:PostTax" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_PostTax_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PostTaxResponse" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_ReconcileTaxHistory_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReconcileTaxHistory" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_ReconcileTaxHistory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReconcileTaxHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_ApplyPayment_InputMessage">
+    <wsdl:part name="parameters" element="tns:ApplyPayment" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_ApplyPayment_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ApplyPaymentResponse" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_TaxSummaryFetch_InputMessage">
+    <wsdl:part name="parameters" element="tns:TaxSummaryFetch" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_TaxSummaryFetch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TaxSummaryFetchResponse" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_GetParameterBagItems_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetParameterBagItems" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_GetParameterBagItems_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetParameterBagItemsResponse" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_GetAllParameterBagItems_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllParameterBagItems" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_GetAllParameterBagItems_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllParameterBagItemsResponse" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_DoNotUseInternalOnly_InputMessage">
+    <wsdl:part name="parameters" element="tns:DoNotUseInternalOnly" />
+  </wsdl:message>
+  <wsdl:message name="TaxSvc_DoNotUseInternalOnly_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DoNotUseInternalOnlyResponse" />
+  </wsdl:message>
+  <wsdl:portType name="TaxSvc">
+    <wsdl:operation name="AdjustTax">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/AdjustTax" message="tns:TaxSvc_AdjustTax_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/TaxSvc/AdjustTaxResponse" message="tns:TaxSvc_AdjustTax_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelTax">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/CancelTax" message="tns:TaxSvc_CancelTax_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/TaxSvc/CancelTaxResponse" message="tns:TaxSvc_CancelTax_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CommitTax">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/CommitTax" message="tns:TaxSvc_CommitTax_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/TaxSvc/CommitTaxResponse" message="tns:TaxSvc_CommitTax_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Ping">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/Ping" message="tns:TaxSvc_Ping_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/TaxSvc/PingResponse" message="tns:TaxSvc_Ping_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsAuthorized">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/IsAuthorized" message="tns:TaxSvc_IsAuthorized_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/TaxSvc/IsAuthorizedResponse" message="tns:TaxSvc_IsAuthorized_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTax">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/GetTax" message="tns:TaxSvc_GetTax_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/TaxSvc/GetTaxResponse" message="tns:TaxSvc_GetTax_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTaxHistory">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/GetTaxHistory" message="tns:TaxSvc_GetTaxHistory_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/TaxSvc/GetTaxHistoryResponse" message="tns:TaxSvc_GetTaxHistory_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PostTax">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/PostTax" message="tns:TaxSvc_PostTax_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/TaxSvc/PostTaxResponse" message="tns:TaxSvc_PostTax_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReconcileTaxHistory">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/ReconcileTaxHistory" message="tns:TaxSvc_ReconcileTaxHistory_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/TaxSvc/ReconcileTaxHistoryResponse" message="tns:TaxSvc_ReconcileTaxHistory_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ApplyPayment">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/ApplyPayment" message="tns:TaxSvc_ApplyPayment_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/TaxSvc/ApplyPaymentResponse" message="tns:TaxSvc_ApplyPayment_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TaxSummaryFetch">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/TaxSummaryFetch" message="tns:TaxSvc_TaxSummaryFetch_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/TaxSvc/TaxSummaryFetchResponse" message="tns:TaxSvc_TaxSummaryFetch_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetParameterBagItems">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/GetParameterBagItems" message="tns:TaxSvc_GetParameterBagItems_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/TaxSvc/GetParameterBagItemsResponse" message="tns:TaxSvc_GetParameterBagItems_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllParameterBagItems">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/GetAllParameterBagItems" message="tns:TaxSvc_GetAllParameterBagItems_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/TaxSvc/GetAllParameterBagItemsResponse" message="tns:TaxSvc_GetAllParameterBagItems_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DoNotUseInternalOnly">
+      <wsdl:input wsaw:Action="http://avatax.avalara.com/services/DoNotUseInternalOnly" message="tns:TaxSvc_DoNotUseInternalOnly_InputMessage" />
+      <wsdl:output wsaw:Action="http://avatax.avalara.com/services/TaxSvc/DoNotUseInternalOnlyResponse" message="tns:TaxSvc_DoNotUseInternalOnly_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CustomBinding_TaxSvc" type="tns:TaxSvc">
+    <wsp:PolicyReference URI="#CustomBinding_TaxSvc_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AdjustTax">
+      <soap:operation soapAction="http://avatax.avalara.com/services/AdjustTax" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelTax">
+      <soap:operation soapAction="http://avatax.avalara.com/services/CancelTax" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CommitTax">
+      <soap:operation soapAction="http://avatax.avalara.com/services/CommitTax" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Ping">
+      <soap:operation soapAction="http://avatax.avalara.com/services/Ping" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsAuthorized">
+      <soap:operation soapAction="http://avatax.avalara.com/services/IsAuthorized" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTax">
+      <soap:operation soapAction="http://avatax.avalara.com/services/GetTax" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTaxHistory">
+      <soap:operation soapAction="http://avatax.avalara.com/services/GetTaxHistory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostTax">
+      <soap:operation soapAction="http://avatax.avalara.com/services/PostTax" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReconcileTaxHistory">
+      <soap:operation soapAction="http://avatax.avalara.com/services/ReconcileTaxHistory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ApplyPayment">
+      <soap:operation soapAction="http://avatax.avalara.com/services/ApplyPayment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TaxSummaryFetch">
+      <soap:operation soapAction="http://avatax.avalara.com/services/TaxSummaryFetch" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetParameterBagItems">
+      <soap:operation soapAction="http://avatax.avalara.com/services/GetParameterBagItems" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllParameterBagItems">
+      <soap:operation soapAction="http://avatax.avalara.com/services/GetAllParameterBagItems" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DoNotUseInternalOnly">
+      <soap:operation soapAction="http://avatax.avalara.com/services/DoNotUseInternalOnly" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_TaxSvc" type="tns:TaxSvc">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AdjustTax">
+      <soap:operation soapAction="http://avatax.avalara.com/services/AdjustTax" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelTax">
+      <soap:operation soapAction="http://avatax.avalara.com/services/CancelTax" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CommitTax">
+      <soap:operation soapAction="http://avatax.avalara.com/services/CommitTax" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Ping">
+      <soap:operation soapAction="http://avatax.avalara.com/services/Ping" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsAuthorized">
+      <soap:operation soapAction="http://avatax.avalara.com/services/IsAuthorized" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTax">
+      <soap:operation soapAction="http://avatax.avalara.com/services/GetTax" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTaxHistory">
+      <soap:operation soapAction="http://avatax.avalara.com/services/GetTaxHistory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostTax">
+      <soap:operation soapAction="http://avatax.avalara.com/services/PostTax" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReconcileTaxHistory">
+      <soap:operation soapAction="http://avatax.avalara.com/services/ReconcileTaxHistory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ApplyPayment">
+      <soap:operation soapAction="http://avatax.avalara.com/services/ApplyPayment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TaxSummaryFetch">
+      <soap:operation soapAction="http://avatax.avalara.com/services/TaxSummaryFetch" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetParameterBagItems">
+      <soap:operation soapAction="http://avatax.avalara.com/services/GetParameterBagItems" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllParameterBagItems">
+      <soap:operation soapAction="http://avatax.avalara.com/services/GetAllParameterBagItems" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DoNotUseInternalOnly">
+      <soap:operation soapAction="http://avatax.avalara.com/services/DoNotUseInternalOnly" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TaxSvc">
+    <wsdl:port name="CustomBinding_TaxSvc" binding="tns:CustomBinding_TaxSvc">
+      <soap:address location="http://avatax.avalara.net/tax/TaxSvc.svc" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_TaxSvc" binding="tns:BasicHttpBinding_TaxSvc">
+      <soap:address location="http://avatax.avalara.net/tax/TaxSvc.svc/AltSec" />
+    </wsdl:port>
+    <wsdl:port name="CustomBinding_TaxSvc1" binding="tns:CustomBinding_TaxSvc">
+      <soap:address location="http://avatax.avalara.net/tax/TaxSvc.svc/v2" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
