@@ -57,7 +57,7 @@ namespace Avalara.AvaTax
 		}
 
 		private string _account;
-		private string _clientName;
+		private string _clientName = "Avalara CloudConnect SDK";
 		private string _license;
 		private string _password;
 		private string _username;

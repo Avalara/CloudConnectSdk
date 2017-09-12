@@ -20,9 +20,8 @@ namespace Avalara.CloudConnect.Sdk.Tests
 		{
 			ClientContext clientContext = new ClientContext()
 			{
-				ClientName = "Avalara CloudConnect SDK",
-				Password = "(YOUR PASSWORD)",
 				Username = "(YOUR USERNAME)",
+				Password = "(YOUR PASSWORD)",
 			};
 
 			_cloudConnectService = new CloudConnectService(clientContext, "(CLOUDCONNECT HOST NAME OR IP ADDRESS)", TaxService.DefaultUri.Host, false)
