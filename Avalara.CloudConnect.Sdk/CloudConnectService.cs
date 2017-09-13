@@ -58,6 +58,15 @@ namespace Avalara.CloudConnect
 		GetTaxResult GetTax(GetTaxRequest request);
 
 		/// <summary>
+		/// Get tax concurrently.
+		/// </summary>
+		/// <param name="requests"></param>
+		/// <param name="cancellationToken"></param>
+		/// <param name="concurrentRequests">Limits the number of concurrent requests. If it is 0 or less, there is no limit on the number of concurrently running requests.</param>
+		/// <returns></returns>
+		IEnumerable<GetTaxResult> GetTax(IEnumerable<GetTaxRequest> requests, CancellationToken cancellationToken, int concurrentRequests);
+
+		/// <summary>
 		/// Gets tax.
 		/// </summary>
 		/// <param name="request"></param>
@@ -81,6 +90,15 @@ namespace Avalara.CloudConnect
 		/// <param name="request"></param>
 		/// <returns></returns>
 		ValidateResult Validate(ValidateRequest request);
+
+		/// <summary>
+		/// Validate concurrently.
+		/// </summary>
+		/// <param name="requests"></param>
+		/// <param name="cancellationToken"></param>
+		/// <param name="concurrentRequests">Limits the number of concurrent requests. If it is 0 or less, there is no limit on the number of concurrently running requests.</param>
+		/// <returns></returns>
+		IEnumerable<ValidateResult> Validate(IEnumerable<ValidateRequest> requests, CancellationToken cancellationToken, int concurrentRequests);
 
 		/// <summary>
 		/// Validates address.
@@ -187,6 +205,35 @@ namespace Avalara.CloudConnect
 		}
 
 		/// <summary>
+		/// Get tax concurrently.
+		/// </summary>
+		/// <param name="requests"></param>
+		/// <param name="cancellationToken"></param>
+		/// <param name="concurrentRequests">Limits the number of concurrent requests. If it is 0 or less, there is no limit on the number of concurrently running requests.</param>
+		/// <returns></returns>
+		public IEnumerable<GetTaxResult> GetTax(IEnumerable<GetTaxRequest> requests, CancellationToken cancellationToken, int concurrentRequests)
+		{
+			List<GetTaxResult> results = new List<GetTaxResult>();
+
+			ParallelOptions parallelOptions = new ParallelOptions()
+			{
+				CancellationToken = cancellationToken,
+				MaxDegreeOfParallelism = concurrentRequests < 1 ? -1 : concurrentRequests,
+			};
+
+			try
+			{
+				Parallel.ForEach(requests, parallelOptions, (r) =>
+				{
+					results.Add(GetTax(r));
+				});
+			}
+			catch (OperationCanceledException) { }
+
+			return results;
+		}
+
+		/// <summary>
 		/// Gets tax.
 		/// </summary>
 		/// <param name="request"></param>
@@ -234,6 +281,35 @@ namespace Avalara.CloudConnect
 			CloudConnectHealthChecker.Stop();
 
 			IsRunning = true;
+		}
+
+		/// <summary>
+		/// Validate concurrently.
+		/// </summary>
+		/// <param name="requests"></param>
+		/// <param name="cancellationToken"></param>
+		/// <param name="concurrentRequests">Limits the number of concurrent requests. If it is 0 or less, there is no limit on the number of concurrently running requests.</param>
+		/// <returns></returns>
+		public IEnumerable<ValidateResult> Validate(IEnumerable<ValidateRequest> requests, CancellationToken cancellationToken, int concurrentRequests)
+		{
+			List<ValidateResult> results = new List<ValidateResult>();
+
+			ParallelOptions parallelOptions = new ParallelOptions()
+			{
+				CancellationToken = cancellationToken,
+				MaxDegreeOfParallelism = concurrentRequests < 1 ? -1 : concurrentRequests,
+			};
+
+			try
+			{
+				Parallel.ForEach(requests, parallelOptions, (r) =>
+				{
+					results.Add(Validate(r));
+				});
+			}
+			catch (OperationCanceledException) { }
+
+			return results;
 		}
 
 		/// <summary>
