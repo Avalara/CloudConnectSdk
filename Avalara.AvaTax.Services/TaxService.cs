@@ -13,7 +13,7 @@ using System.Xml.Serialization;
 
 namespace Avalara.AvaTax
 {
-	public interface ITaxService : IBaseService
+	public interface ITaxService : IBaseService, IDisposable
 	{
 		GetTaxResult GetTax(GetTaxRequest GetTaxRequest);
 	}

@@ -18,18 +18,19 @@ namespace Avalara.CloudConnect.Sdk.Tests
 		[ClassInitialize]
 		public static void ClassInitialize(TestContext testContext)
 		{
-			ClientContext clientContext = new ClientContext()
+			CloudConnectSettings settings = new CloudConnectSettings()
 			{
-				Username = "(YOUR USERNAME)",
-				Password = "(YOUR PASSWORD)",
+				AvaTaxClientContext = new ClientContext()
+				{
+					Username = "(YOUR USERNAME)",
+					Password = "(YOUR PASSWORD)",
+				},
+				CloudConnectHostNameOrIPAddress = "(CLOUDCONNECT HOST NAME OR IP ADDRESS)",
 			};
 
-			_cloudConnectService = new CloudConnectService(clientContext, "(CLOUDCONNECT HOST NAME OR IP ADDRESS)", TaxService.DefaultUri.Host, false)
-			{
-				ServiceMode = ServiceMode.CloudConnectThenRemote,
-			};
+			_cloudConnectService = new CloudConnectService(settings);
 
-			_cloudConnectService.Start();
+			_cloudConnectService.StartHealthChecker();
 		}
 
 		[TestMethod]

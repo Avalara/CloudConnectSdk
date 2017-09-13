@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CloudConnectSettings.cs" />
     <Compile Include="CloudConnectHealthChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CloudConnectService.cs" />

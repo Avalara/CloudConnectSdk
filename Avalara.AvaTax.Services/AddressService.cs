@@ -13,7 +13,7 @@ using System.Xml.Serialization;
 
 namespace Avalara.AvaTax
 {
-	public interface IAddressService : IBaseService
+	public interface IAddressService : IBaseService, IDisposable
 	{
 		ValidateResult Validate(ValidateRequest ValidateRequest);
 	}

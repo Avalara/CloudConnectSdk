@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Avalara.CloudConnect
@@ -45,9 +46,9 @@ namespace Avalara.CloudConnect
 		ITaxService RemoteTaxService { get; }
 
 		/// <summary>
-		/// Gets or sets CloudConnect service mode. Default is CloudConnectThenRemote.
+		/// Gets CloudConnect service settings.
 		/// </summary>
-		ServiceMode ServiceMode { get; set; }
+		CloudConnectSettings Settings { get; }
 
 		/// <summary>
 		/// Gets tax.
@@ -57,14 +58,22 @@ namespace Avalara.CloudConnect
 		GetTaxResult GetTax(GetTaxRequest request);
 
 		/// <summary>
-		/// Starts CloudConnect service which starts the CloudConnect health checker. (Non-blocking)
+		/// Gets tax.
 		/// </summary>
-		void Start();
+		/// <param name="request"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		Task<GetTaxResult> GetTaxAsync(GetTaxRequest request, CancellationToken cancellationToken);
 
 		/// <summary>
-		/// Stops CloudConnect service which stops the CloudConnect health checker.
+		/// Starts CloudConnect health checker. (Non-blocking)
 		/// </summary>
-		void Stop();
+		void StartHealthChecker();
+
+		/// <summary>
+		/// Stops CloudConnect health checker.
+		/// </summary>
+		void StopHealthChecker();
 
 		/// <summary>
 		/// Validates address.
@@ -72,6 +81,14 @@ namespace Avalara.CloudConnect
 		/// <param name="request"></param>
 		/// <returns></returns>
 		ValidateResult Validate(ValidateRequest request);
+
+		/// <summary>
+		/// Validates address.
+		/// </summary>
+		/// <param name="request"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		Task<ValidateResult> ValidateAsync(ValidateRequest request, CancellationToken cancellationToken);
 	}
 
 	/// <summary>
@@ -110,26 +127,21 @@ namespace Avalara.CloudConnect
 		public ITaxService RemoteTaxService { get; private set; }
 
 		/// <summary>
-		/// Gets or sets CloudConnect service mode. Default is CloudConnectThenRemote.
+		/// Gets CloudConnect service settings.
 		/// </summary>
-		public ServiceMode ServiceMode { get; set; } = ServiceMode.CloudConnectThenRemote;
+		public CloudConnectSettings Settings { get; private set; }
 
 		private bool _objectDisposed;
 
 		/// <summary>
 		/// Instantiates a new instance of CloudConnect service.
 		/// </summary>
-		/// <param name="clientContext"></param>
-		/// <param name="cloudConnectHostNameOrIPAddress"></param>
-		/// <param name="remoteHostNameOrIPAddress"></param>
-		/// <param name="cloudConnectSsl"></param>
-		public CloudConnectService(ClientContext clientContext, string cloudConnectHostNameOrIPAddress, string remoteHostNameOrIPAddress, bool cloudConnectSsl)
+		/// <param name="settings"></param>
+		public CloudConnectService(CloudConnectSettings settings)
 		{
-			CloudConnectHealthChecker = new CloudConnectHealthChecker(cloudConnectHostNameOrIPAddress);
-			CloudConnectAddressService = new AddressService(clientContext, $"http{(cloudConnectSsl ? "s" : "")}://{cloudConnectHostNameOrIPAddress}:808{(cloudConnectSsl ? "4" : "0")}{AddressService.DefaultUri.AbsolutePath}");
-			CloudConnectTaxService = new TaxService(clientContext, $"http{(cloudConnectSsl ? "s" : "")}://{cloudConnectHostNameOrIPAddress}:808{(cloudConnectSsl ? "4" : "0")}{TaxService.DefaultUri.AbsolutePath}");
-			RemoteAddressSevice = new AddressService(clientContext, $"https://{remoteHostNameOrIPAddress}{AddressService.DefaultUri.AbsolutePath}");
-			RemoteTaxService = new TaxService(clientContext, $"https://{remoteHostNameOrIPAddress}{TaxService.DefaultUri.AbsolutePath}");
+			Settings = settings ?? throw new ArgumentNullException(nameof(settings));
+
+			CreateServices();
 		}
 
 		/// <summary>
@@ -141,31 +153,31 @@ namespace Avalara.CloudConnect
 		{
 			GetTaxResult result = null;
 
-			if (ServiceMode <= ServiceMode.CloudConnectThenRemote && CloudConnectHealthChecker.IsHealthy)
+			if (Settings.ServiceMode <= ServiceMode.CloudConnectThenRemote && (!IsRunning || CloudConnectHealthChecker.IsHealthy))
 			{
 				try
 				{
 					result = CloudConnectTaxService.GetTax(request);
 				}
-				catch (Exception) when (ServiceMode == ServiceMode.CloudConnectThenRemote) { }
+				catch (Exception) when (Settings.ServiceMode == ServiceMode.CloudConnectThenRemote) { }
 
-				if (IsGetTaxResultCodeOk(result) || ServiceMode == ServiceMode.CloudConnectOnly)
+				if (IsGetTaxResultCodeOk(result) || Settings.ServiceMode == ServiceMode.CloudConnectOnly)
 				{
 					return result;
 				}
 			}
-			else if (ServiceMode == ServiceMode.CloudConnectOnly)
+			else if (Settings.ServiceMode == ServiceMode.CloudConnectOnly)
 			{
-				throw new Exception("Using only CloudConnect but it is not healthy.");
+				throw new Exception("Using only CloudConnect but it is not healthy or health checker is not running.");
 			}
 
 			try
 			{
 				result = RemoteTaxService.GetTax(request);
 			}
-			catch (Exception) when (ServiceMode == ServiceMode.RemoteThenCloudConnect) { }
+			catch (Exception) when (Settings.ServiceMode == ServiceMode.RemoteThenCloudConnect) { }
 
-			if (IsGetTaxResultCodeOk(result) || ServiceMode != ServiceMode.RemoteThenCloudConnect || !CloudConnectHealthChecker.IsHealthy)
+			if (IsGetTaxResultCodeOk(result) || Settings.ServiceMode != ServiceMode.RemoteThenCloudConnect || (IsRunning && !CloudConnectHealthChecker.IsHealthy))
 			{
 				return result;
 			}
@@ -175,9 +187,20 @@ namespace Avalara.CloudConnect
 		}
 
 		/// <summary>
-		/// Starts CloudConnect service which starts the CloudConnect health checker. (Non-blocking)
+		/// Gets tax.
 		/// </summary>
-		public void Start()
+		/// <param name="request"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public Task<GetTaxResult> GetTaxAsync(GetTaxRequest request, CancellationToken cancellationToken)
+		{
+			return Task.Run(() => GetTax(request), cancellationToken);
+		}
+
+		/// <summary>
+		/// Starts CloudConnect health checker.
+		/// </summary>
+		public void StartHealthChecker()
 		{
 			if (_objectDisposed)
 			{
@@ -194,9 +217,9 @@ namespace Avalara.CloudConnect
 		}
 
 		/// <summary>
-		/// Stops CloudConnect service which stops the CloudConnect health checker.
+		/// Stops CloudConnect health checker.
 		/// </summary>
-		public void Stop()
+		public void StopHealthChecker()
 		{
 			if (_objectDisposed)
 			{
@@ -222,31 +245,31 @@ namespace Avalara.CloudConnect
 		{
 			ValidateResult result = null;
 
-			if (ServiceMode <= ServiceMode.CloudConnectThenRemote && CloudConnectHealthChecker.IsHealthy)
+			if (Settings.ServiceMode <= ServiceMode.CloudConnectThenRemote && (!IsRunning || CloudConnectHealthChecker.IsHealthy))
 			{
 				try
 				{
 					result = CloudConnectAddressService.Validate(request);
 				}
-				catch (Exception) when (ServiceMode == ServiceMode.CloudConnectThenRemote) { }
+				catch (Exception) when (Settings.ServiceMode == ServiceMode.CloudConnectThenRemote) { }
 
-				if (IsValidateResultCodeOk(result) || ServiceMode == ServiceMode.CloudConnectOnly)
+				if (IsValidateResultCodeOk(result) || Settings.ServiceMode == ServiceMode.CloudConnectOnly)
 				{
 					return result;
 				}
 			}
-			else if (ServiceMode == ServiceMode.CloudConnectOnly)
+			else if (Settings.ServiceMode == ServiceMode.CloudConnectOnly)
 			{
-				throw new Exception("Using only CloudConnect but it is not healthy.");
+				throw new Exception("Using only CloudConnect but it is not healthy or health checker is not running.");
 			}
 
 			try
 			{
 				result = RemoteAddressSevice.Validate(request);
 			}
-			catch (Exception) when (ServiceMode == ServiceMode.RemoteThenCloudConnect) { }
+			catch (Exception) when (Settings.ServiceMode == ServiceMode.RemoteThenCloudConnect) { }
 
-			if (IsValidateResultCodeOk(result) || ServiceMode != ServiceMode.RemoteThenCloudConnect || !CloudConnectHealthChecker.IsHealthy)
+			if (IsValidateResultCodeOk(result) || Settings.ServiceMode != ServiceMode.RemoteThenCloudConnect || (IsRunning && !CloudConnectHealthChecker.IsHealthy))
 			{
 				return result;
 			}
@@ -254,9 +277,29 @@ namespace Avalara.CloudConnect
 			return CloudConnectAddressService.Validate(request);
 		}
 
-		private static bool IsValidateResultCodeOk(ValidateResult result) => result != null && (result.ResultCode == AvaTax.AddressSvc.SeverityLevel.Success || result.ResultCode == AvaTax.AddressSvc.SeverityLevel.Warning);
+		/// <summary>
+		/// Validates address.
+		/// </summary>
+		/// <param name="request"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public Task<ValidateResult> ValidateAsync(ValidateRequest request, CancellationToken cancellationToken)
+		{
+			return Task.Run(() => Validate(request), cancellationToken);
+		}
 
 		private static bool IsGetTaxResultCodeOk(GetTaxResult result) => result != null && (result.ResultCode == AvaTax.TaxSvc.SeverityLevel.Success || result.ResultCode == AvaTax.TaxSvc.SeverityLevel.Warning);
+
+		private static bool IsValidateResultCodeOk(ValidateResult result) => result != null && (result.ResultCode == AvaTax.AddressSvc.SeverityLevel.Success || result.ResultCode == AvaTax.AddressSvc.SeverityLevel.Warning);
+
+		private void CreateServices()
+		{
+			CloudConnectHealthChecker = new CloudConnectHealthChecker(Settings.CloudConnectHostNameOrIPAddress);
+			CloudConnectAddressService = new AddressService(Settings.AvaTaxClientContext, $"{Settings.CloudConnectBaseUri}{AddressService.DefaultUri.AbsolutePath}");
+			CloudConnectTaxService = new TaxService(Settings.AvaTaxClientContext, $"{Settings.CloudConnectBaseUri}{TaxService.DefaultUri.AbsolutePath}");
+			RemoteAddressSevice = new AddressService(Settings.AvaTaxClientContext, $"{Settings.RemoteBaseUri}{AddressService.DefaultUri.AbsolutePath}");
+			RemoteTaxService = new TaxService(Settings.AvaTaxClientContext, $"{Settings.RemoteBaseUri}{TaxService.DefaultUri.AbsolutePath}");
+		}
 
 		#region IDisposable
 
@@ -281,14 +324,47 @@ namespace Avalara.CloudConnect
 		{
 			if (!_objectDisposed && disposing)
 			{
-				if (CloudConnectHealthChecker != null)
-				{
-					try { CloudConnectHealthChecker.Dispose(); }
-					catch { }
-					CloudConnectHealthChecker = null;
-				}
+				DisposeServices();
 
 				_objectDisposed = true;
+			}
+		}
+
+		private void DisposeServices()
+		{
+			if (CloudConnectHealthChecker != null)
+			{
+				try { CloudConnectHealthChecker.Dispose(); }
+				catch { }
+				CloudConnectHealthChecker = null;
+			}
+
+			if (CloudConnectAddressService != null)
+			{
+				try { CloudConnectAddressService.Dispose(); }
+				catch { }
+				CloudConnectAddressService = null;
+			}
+
+			if (CloudConnectTaxService != null)
+			{
+				try { CloudConnectTaxService.Dispose(); }
+				catch { }
+				CloudConnectTaxService = null;
+			}
+
+			if (RemoteAddressSevice != null)
+			{
+				try { RemoteAddressSevice.Dispose(); }
+				catch { }
+				RemoteAddressSevice = null;
+			}
+
+			if (RemoteTaxService != null)
+			{
+				try { RemoteTaxService.Dispose(); }
+				catch { }
+				RemoteTaxService = null;
 			}
 		}
 
